@@ -41,7 +41,7 @@ print('s1=', s1, 'del=', s1.pop())
 
 # remove() 刪除集合中的指定元素
 # 元素不存在會報錯 KeyError: '100'
-# tmp = s1.remove('100')
+tmp = s1.remove('100')
 print(s1, tmp)
 
 # clear() 清空集合
