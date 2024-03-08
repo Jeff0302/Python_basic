@@ -41,3 +41,33 @@ def fn(input_list: list, fun):
 
 print(fn(l, is_even))
 
+# filter()
+# filter()可以從序列中過濾出符合條件的元素，保存到一個新的序列中
+# 參數:
+#   1. 函數，根據該函數來過濾序列(可疊代結構)
+#   2. 需要過濾的序列(可疊代結構)
+# 返回值:
+#    過濾後的新序列(可疊代結構)
+
+# is_even是最作為參數傳遞進filter()函數中的
+#   而is_even實際上只有一個作用，就是作為filter()的參數
+#   filter()調用完畢以後，is_even就已經沒用
+print(list(filter(is_even, l)))
+
+# 匿名函數lambda函數表達式(語法糖)
+#  lambda函數表達式專門用來創建一些簡單的函數，它是函數創建的另一種方式
+# 語法:
+#      lambda 參數列表: 返回值
+# 匿名函數一般都是作為參數使用，其他地方不會使用
+
+# 可以將一個匿名函數賦值給一個變量，一般不會這麼做
+fn2 = lambda x, y: x + y
+print(fn2(1, 3))
+
+print(list(filter(lambda x: x % 2 == 0, l)))
+
+# map()
+# map()函數可以對可疊代對象中的所有元素進行指定操作，並將結果添加到一個新的可疊代對象中返回
+print(list(map(lambda x: x + 1, l)))
+
+
