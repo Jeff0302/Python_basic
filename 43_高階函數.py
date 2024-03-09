@@ -70,4 +70,25 @@ print(list(filter(lambda x: x % 2 == 0, l)))
 # map()函數可以對可疊代對象中的所有元素進行指定操作，並將結果添加到一個新的可疊代對象中返回
 print(list(map(lambda x: x + 1, l)))
 
+# sort()
+# 該方法用來對列表中的元素進行排序
+# sort()方法默認是直接比較列表中元素的大小
+# 在sort()可以接受一個關鍵字參數 key
+#   key需要一個函數作為參數，當設置了函數作為參數
+#   每次都會以列表中的一個元素作為參數來調用函數，並使用函數的返回值大小來進行排序
+l = ['bb', 'aaaa', 'c', 'ddddddd', 'fff']
+l.sort(key=len)
+print(l)
 
+l = [2, 5, '1', 3, '6', '4']
+l.sort(key=int)
+print(l)
+
+# sorted()
+# 這個函數和sort()用來基本一致，但是sorted()可以對任意序列進行排序
+#   並且使用sorted()排序不會影響原來的對象，而是返回一個新的對象
+l = [2, 5, '1', 3, '6', '4']
+print('排序前l:', l)
+ln = sorted(l, key=int)
+print('排序後l:', l)
+print('ln:', ln)
