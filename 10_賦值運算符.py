@@ -13,12 +13,16 @@
 
 a = 10
 a += 5
+print('a= ',a) # 15
 a -= 5
+print('a= ',a) # 10
 a **= 2
+print('a= ',a) # 100
 a /= 25
-a = 25.0
+print('a= ',a) # 4.0
+a = 25
 a //= 5
+print('a= ',a) # 5.0
 a = 5
 a %= 4
-
-print('a= ',a)
+print('a= ',a) # 1
