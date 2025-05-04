@@ -24,34 +24,34 @@ a = True
 # 如果希望修改原來變量，則需要將變量重新賦值
 
 a = int(a)
-print('a= ', a)
+print('a= ', a) # 1
 print('type= ', type(a))
 
 
 a = int('123')
-print('a= ', a)
+print('a= ', a) # 123
 print('type= ', type(a))
 
 a = int('100', 16)
-print('a= ', a)
+print('a= ', a) # 256
 print('type= ', type(a))
 
 a = int(11.6)
-print('a= ', a)
+print('a= ', a) # 11
 print('type= ', type(a))
 
 
 a = 1
 a = float(a)
-print('a= ', a)
+print('a= ', a) # 1.0
 print('type= ', type(a))
 
 a = 123
-a = str(a)
+a = str(a) # '123'
 print('a= ', a)
 print('type= ', type(a))
 
 a = ''
-a = bool(a)
+a = bool(a) # False
 print('a= ', a)
 print('type= ', type(a))

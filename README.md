@@ -301,13 +301,74 @@ print(f'我是{name}, 今年{age:-^10.2f}歲')
 
 ## 類型檢查 - `type(變量)`
 
+```python
+print(type(1))      # <class 'int'>
+print(type(1.5))    # <class 'float'>
+print(type('123'))  # <class 'str'>
+print(type(True))   # <class 'bool'>
+print(type(None))   # <class 'NoneType'>
+```
+
 ## 轉Int類型 - `int(變量, [base])`
+
+```python
+a = int(a)
+print('a= ', a) # 1
+print('type= ', type(a))
+
+
+a = int('123')
+print('a= ', a) # 123
+print('type= ', type(a))
+
+a = int('100', 16) 
+print('a= ', a) # 256
+print('type= ', type(a))
+
+a = int(11.6) 
+print('a= ', a) # 11
+print('type= ', type(a))
+```
 
 ## 轉float類型 - `float(變量)`
 
+```python
+a = 1
+a = float(a)
+print('a= ', a) # 1.0
+print('type= ', type(a))
+
+```
+
 ## 轉str類型 - `str(變量)`
 
+```python
+a = 123
+a = str(a) # '123'
+print('a= ', a)
+print('type= ', type(a))
+```
+
 ## 轉bool類型 - `bool(變量)`
+
+```python
+a = ''
+a = bool(a) # False
+print('a= ', a)
+print('type= ', type(a))
+```
+
+> 注意:
+>
+> ​	調用方法來將變量轉換類型，函數不會對原來的變量產生影響，它是`將對象轉換為指定類型並作為返回值返回`。因此如果希望修改原先變量，則需要重新賦值。
+
+
+
+---
+
+
+
+
 
 
 
