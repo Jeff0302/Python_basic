@@ -19,7 +19,7 @@
 result = 10 > 20    # False
 result = 30 > 20    # True
 result = 30 < 20    # False
-result = 10 > 10    # True
+result = 10 > 10    # False
 
 result = 2 > True   # True
 print('result= ', result)
@@ -33,7 +33,7 @@ result = '2' > ' 1'   # True
 result = '2' > ' 11'  # True
 result = 'a' > 'b'  # False
 result = 'ab' > 'b'  # False
-result = 'ab' > 'ab'  # False
+result = 'ac' > 'ab'  # False
 print('result= ', result)
 
 result = 1 == 1                 # True

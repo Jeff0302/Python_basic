@@ -366,7 +366,9 @@ print('type= ', type(a))
 
 ---
 
-# 5. 算術運算符
+# 5. 運算符
+
+## 5-1. 算數運算符
 
 ### 加法運算 `+`
 
@@ -403,11 +405,7 @@ a = 10 % 4     # 2
 print("a= ", a)
 ```
 
-
-
----
-
-# 6. 賦值運算符
+## 5-2. 賦值運算符
 
 ### `+=` :  a += 5 相當於 a = a + 5
 
@@ -440,6 +438,55 @@ a = 5
 a %= 4
 print('a= ',a) # 1
 ```
+
+
+
+## 5-3. 關係運算符
+
+### `>`: 比較左側值是否大於右側值 
+### `>=`: 比較左側值是否大於等於右側值
+### `<`: 比較左側值是否小於右側值 
+### `<=`: 比較左側值是否小於等於右側值
+### `==`: 比較左側值是否等於右側值
+### `!=`: 比較左側值是否不等於右側值
+### `is`: 比較兩個對象的是否是同一個對象
+### `is not`: 比較兩個對象的是否不是同一個對象
+
+```python
+result = 10 > 20    # False
+result = 30 > 20    # True
+result = 30 < 20    # False
+result = 10 > 10    # False
+
+result = 2 > True   # True
+print('result= ', result)
+
+# 在Python中可以對兩個字串進行大於(等於)或小於(等於)的運算
+# 當對字符串進行比較時，實際上比較的是字符串的Unicode編碼
+# 比較兩個字串的Unicode編碼時，是逐位比較的
+# 利用此特性可以讓字符串按照字母順序進行排序
+
+result = '2' > ' 1'   # True
+result = '2' > ' 11'  # True
+result = 'a' > 'b'  # False
+result = 'ab' > 'b'  # False
+result = 'ac' > 'ab'  # False
+print('result= ', result)
+
+result = 1 == 1                 # True
+result = 'hello' == 'hello'     # True
+result = 'abc' == 'bcd'         # False
+result = 'abc' != 'bcd'         # True
+result = 1 == True              # True
+a = 1
+result = a is True              # False
+
+print('result= ', result)
+print(id(1), id(True))
+
+```
+
+
 
 
 
