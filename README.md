@@ -488,11 +488,129 @@ print(id(1), id(True))
 
 
 
+## 5-4. 邏輯運算符
+
+### 邏輯非`not`
+
+>  not可以對符號右邊值進行非運算
+>
+>+ 對於布爾值，非運算會對其進行取反操作,True變False,False變True
+>+ 對於非布爾值，非運算會先將其轉換為布爾值,然後再取反
+
+```python
+a = True
+a = not a   # False
+a = 1
+a = not a   # False
+```
+
+### 邏輯與`and`
+
+>  and可以將符號兩側的值進行與運算
+>
+>+ 只有在符號兩側值都回True時,才會返回True,只要有一個False則返回False
+>+ 與運算是找False，`Python中的與運算是短路的與，如果第一個值是False,則不看第二個`
+
+```python
+result = True and True      # True
+result = True and False     # False
+result = False and True     # False
+result = False and False    # False
+
+False and print('你猜我出來出來嗎?') # print不會執行
+True and print('你猜我出來出來嗎?')  # print會執行
+```
+
+### 邏輯或`or`
+
+>  or可以對符號兩側的值進行或運算
+>
+>+ 或運算兩個值中只要有一個為True,就會返回True
+>+ 或運算是找True，Python中的或運算是短路的或，如果第一個值是True,則不看第二個
+
+```python
+result = True or True      # True
+result = True or False     # True
+result = False or True     # True
+result = False or False    # False
+
+False or print('你猜我出來出來嗎?')   # print會執行
+True or print('你猜我出來出來嗎?')    # print不會執行
+```
 
 
----
 
+### *注意事項 - 非布爾值的`and`/`or`運算
 
+>+ 當我們對非布爾值進行與或運算時，`Python會將其當作布爾值運算，最終返回原值`。
+>
+>+ `and`運算規則
+>
+>  與運算是找false的，如果第一個是false，則不看第二個。
+>
+>  如果第一個值是false則直接返回第一個，否則返回第二個。
+>  
+>+ `or`運算規則
+>
+>   或運算是找true的，如果第一個是true，則不看第二個。
+>
+>   如果第一個值是true則直接返回第一個，否則返回第二個值。   
+
+```python
+result = 1 and 2    # 2
+result = 1 and 0    # 0
+result = 0 and 1    # 0
+result = 0 and None    # 0 
+
+result = 1 or 2  # 1
+result = 1 or 0  # 1
+result = 0 or 1  # 1
+
+result = 0 or None  # None
+```
+
+## 5-5. 三目運算符(條件運算符)
+
+### 語法: `語句1 if 條件達式 else 語句2`
+
+>執行流程:
+>
+>​	條件運算符在執行時，會先對條件表達式進行判斷。
+>
+>如果判定結果為true，則執行語句1，並返回執行結果
+>
+>如果判定結果為false，則執行語句2，並返回執行結果
+
+```python
+# print("你好") if True else print("Hello")
+a = 10
+b = 20
+# print('a的值比較大') if a > b else print('a的值比較小')
+max = a if a > b else b
+print(max) # 20
+```
+
+## 5-6. 運算符優先集
+
++ 優先順序為上至下
+
+| 運算符號                                     | 表示          |
+| :------------------------------------------- | :------------ |
+| ()                                           | 括號          |
+| **                                           | 指數          |
+| +x, -x, ~x                                   | 正、負、倒數  |
+| *, /, //, %                                  | 乘、除、餘數  |
+| +, -                                         | 加、減        |
+| <<, >>                                       | 位元 SHIFT    |
+| &                                            | 位元 AND      |
+| ^                                            | 位元 XOR      |
+| \|                                           | 位元 OR       |
+| ==, !=, >, >=, <, <=, is, is not, in, not in | 邏輯 比較符號 |
+| not                                          | 邏輯 NOT      |
+| and                                          | 邏輯 AND      |
+| or                                           | 邏輯 OR       |
+
+> ​	和數學中一樣，在Python運算也有優先級，比如先乘除後加減。運算符的優先級可以根據優先級的表格來查詢，在表格中位置越靠上的運算符優先級越高，優先級越高的越優先計算，如果優先級一樣則自左向右計算，關於優先級的表格，你知道有這麼一個東西就夠了，千萬不要去記，在開發中如果越到優先級不清楚的，則可以通過小括號來改變運算順序。
 
 # 教學資源
 
