@@ -45,5 +45,7 @@ print('b=', b)
 
 # 常用16進操作
 A = '0022FF'
-A_byte = [A[i:i+2] for i in range(0, len(A), 2)][-1::-1]
-print(A_byte)
+
+#A_byte = [A[i:i+2] for i in range(0, len(A), 2)][-1::-1]
+A = bytes.fromhex(A)[::-1]
+print(A.hex())

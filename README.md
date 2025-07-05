@@ -1323,9 +1323,101 @@ output
 
 
 
-
-
 <span alt="solid">範例: 08_列表</span>
+
+
+
+---
+
+# 9. 序列 - 元組tuple
+
+## 9-1. 元組的創建 `tuple_name= ()`
+
+### - 元組是一個`不可變的序列`
+
+### - 所以在操作元組時，就把元組當成一個`不可變的列表`
+
+### - 一般當我們希望數據不改變時，就使用元組，其餘情況都使用列表
+
+```python
+# 創建元組
+# 使用()來創建元組
+t = ()  # 創建一個空元組
+print(type(t))
+
+my_tuple = (1, 2, 3, 4, 5)  # 創建一個五個元素的元組
+print(my_tuple)
+print(my_tuple[3])
+# 元組是不可變對象，不能嘗試對元組中的元素重新賦值
+# my_tuple[3] = 1  TypeError: 'tuple' object does not support item assignment
+
+```
+
+### - 當元組不是空元組時，括號可以省略。如果元組不是空元組，它裡邊至少要一個逗號,
+
+```python
+my_tuple = 1, 2, 3, 4, 5
+my_tuple = 10,
+print(my_tuple)
+```
+
+##  9-2. [重要]序列解包操作
+
+### - 1對1分離 `a, b, c, d = my_tuple`
+
+>在對元組進行解包時，變量的數量需要和元組中的元素數量一致。
+
+```python
+my_tuple = (10, 20, 30, 40)
+a, b, c, d = my_tuple
+print('a=', a)
+print('b=', b)
+print('c=', c)
+print('d=', d)
+
+'''
+output
+a= 10
+b= 20
+c= 30
+d= 40
+'''
+```
+
+### - 1對1分離 & 1對多分離  `a, b, *c = my_tuple`
+
+>可以在變量前面加一個*，這樣變量將會獲取元組中剩餘的所有元素。
+
+```python
+my_tuple = 1, 2, 3, 4, 5
+a, b, *c = my_tuple
+print('c = ', c)
+a, *b, c = my_tuple
+print('b = ', b)
+
+'''
+output
+c =  [3, 4, 5]
+b =  [2, 3, 4]
+'''
+```
+
+### - [應用]交換a和b的值，這時我們就可以利用元組的解包 `a, b = b, a`
+
+```python
+a = 20
+b = 40
+b, a= a, b
+print(f'a= {a}')
+print(f'b= {b}')
+
+```
+
+
+
+<span alt="solid">範例: 09_元組</span>
+
+
 
 
 
