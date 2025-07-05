@@ -1480,6 +1480,228 @@ print('a is b?', a is b)
 
 ---
 
+# 11. 序列 - 字典`dict`
+
+## 11-1. 字典(dict)簡介
+
+### - 字典屬於一種新的數據結構，稱之為映射(mapping)
+
+### \- 字典的作用和列表類似，都是用來儲存對象的容器
+
+### \- *列表存儲數據的性能很好，但查詢數據的性能很差
+
+### -在字典中每一個元素都有唯一的名字，通過這個唯一的名子可以快速地查找到指定的元素
+
+### - 在查詢元素時，字典的效率是非常快的
+
+### - 字典中也是可以保存多個對象，每個對象都會有一個唯一的名子，我們也稱為鍵值對結構(key-value)
+
+> 字典中也是可以保存多個對象，每個對象都會有一個唯一的名子。這個唯一的名子,我們稱之為key(鍵)，通過key可以快速查找value。這個對象，我們稱其為value(值)。所以字典，我們也稱為鍵值對結構(key-value)。每個字典中都可以有多個鍵值對，而每一個鍵值對，我們稱值為item。
+
+
+
+## 11-2.  創建字典
+
+### \- 使用`{}`/`dict()`來創建一個空字典
+
+```python
+# 創建一個空字典
+# 使用{}來創建字典
+my_dict = {}
+# my_dict = dict()
+print(type(my_dict))
+```
+
+### \- `{key: value, key: value, key: value..}`創建一個有數據的字典
+
+>語法:
+>
+>​	{key: value, key: value, key: value..}
+>
+>1. 字典的值可以是任意對象
+>
+>2. 字典的key可以是任意的不可變對象(`int`、`str`、`bool`、`tuple`...)，但一般我們都會使用`str`
+>3. 字典的key是不能重複的，如果出現重複的，後面會替換到前邊的
+
+```python
+d = {'name': '孫悟空', 'age': 18, 'gender': '男'}
+print(d)
+```
+
+### \- 根據鍵來獲取值`dict_var['key']`
+
+```python
+# 可以根據鍵來獲取值
+print(d['name'], d['age'], d['gender'])
+# 如果使用字典中不存在的鍵值，會抱錯
+# print(d['hello'])  KeyError: 'hello'
+```
+
+
+
+## 11-3. 字典使用
+
+### \- 使用dict()函數來創建字典 `d = dict(name='孫悟空', age=18, gender='男')`
+```python
+d = dict(name='孫悟空', age=18, gender='男')
+print(d, type(d))
+```
+
+### - 可以將一個`雙值子序列`的序列轉換為字典
+
+```python
+d = dict([('name', '孫悟空'), ('age', 18), ('gender', '男')])
+print(d, type(d))
+```
+
+### \- `len()`函數 獲取字典內鍵值對的個數
+
+```python
+d = dict([('name', '孫悟空'), ('age', 18), ('gender', '男')])
+print(len(d))
+```
+
+### \- `[not] in` 檢查字典內是否有包含指定的`key`
+
+```python
+d = dict([('name', '孫悟空'), ('age', 18), ('gender', '男')])
+print('name' in d)
+print('aaa' not in d)
+```
+
+### \- `get(key[, default])` 該方法用來根據鍵獲取字典的值, 如果獲取的鍵在不在字典中，則返回none。也可以指定一個默認值，來作為第二個參數，這樣獲取不到值時，會返回默認值。
+
+```python
+d = dict([('name', '孫悟空'), ('age', 18), ('gender', '男')])
+print(d.get('aaa', '默認值'))
+```
+
+### \- `d[key] = value` 修改/新增字典, 如果key存在則覆蓋，不存在則添加。
+
+```python
+d = dict([('name', '孫悟空'), ('age', 18), ('gender', '男')])
+d['name'] = 'Jeff'
+print(d)
+d['address'] = '花果山'
+print(d)
+```
+
+### \-  `setdefault(key[, default])` 可以用來向字典中添加鍵字對，如果鍵值存在則不會覆蓋，鍵值不存在就會添加key-value。
+
+```python
+d = dict([('name', '孫悟空'), ('age', 18), ('gender', '男')])
+d.setdefault('電話', '1111')
+print(d)
+```
+
+### \- `update([dict])`將其他字典中的key-value，添加到當前字典中，如果有重複的key，後面的會替換當前的。
+
+```python
+d = {'a': 1, 'b': 2, 'c': 3}
+d2 = {'d': 4, 'e': 6, 'f': 6, 'a': '7'}
+d.update(d2)
+print(d)
+```
+
+### \- `del dict_name[key]`用來刪除字典中的key-value，如果刪除不存在的key，它會拋出異常。
+
+```python
+d = {'a': 1, 'b': 2, 'c': 3}
+del d['a']
+del d['b']
+print(d)
+```
+
+### \-  `popitem()`隨機刪除字典中的鍵值對，一般會刪除最後一個鍵值對。 刪除之後，它會將刪除的key-value做為返回值返回。返回的是一個元組，元組中有兩個元素，第一個是刪除的key，第二個是刪除的value。當使用`popitem`刪除一個空字典時，會拋出異常`KeyError: 'popitem(): dictionary is empty'`。
+
+```python
+d = {'a': 1, 'b': 2, 'c': 3}
+result = d.popitem()
+print(result)
+```
+
+### \-  `pop(key[, default])` 根據key刪除字典中的key-value，會將被刪除的value返回。如果刪除不存在的key，它會拋出異常。如果指定了默認值，再刪除不存在的key，不會報錯，而是直接返回默認值。
+
+```python
+d = {'a': 1, 'b': 2, 'c': 3}
+result = d.pop('e')
+result = d.pop('z', '默認值')
+```
+
+### \- `clear()` 用來清空字典
+
+```python
+d = {'a': 1, 'b': 2, 'c': 3}
+d.clear()
+print('result=', d)
+```
+
+### \- *`copy()` 該法方用來對字典進行淺複製，複製以後的對象和原對象是獨立，修改一個不會影響另一個， 注意，淺複製只會簡單複製對象內的值，如果值也是一個可變對象，這個可變對象不會被複製。
+
+```python
+d = {'a': 1, 'b': 2, 'c': 3}
+# d2 = d
+d2 = d.copy()
+print('d=', '{:#x}'.format(id(d)))
+print('d2=', '{:#x}'.format(id(d2)))
+
+d = {'a': {'name': 'Jeff', 'age': 18, 'gender': '男'}, 'b': 2, 'c': 3}
+d2 = d.copy()
+d2['a']['name'] = '豬八戒'
+print(d)
+print(d2)
+
+print("d['a']", '{:#x}'.format(id(d["a"])))
+print("d2['a']",'{:#x}'.format(id(d2['a'])))
+'''
+d= 0x2a2b01e8d00
+d2= 0x2a2b02ab4c0
+{'a': {'name': '豬八戒', 'age': 18, 'gender': '男'}, 'b': 2, 'c': 3}
+{'a': {'name': '豬八戒', 'age': 18, 'gender': '男'}, 'b': 2, 'c': 3}
+d['a'] 0x2a2b02ab100
+d2['a'] 0x2a2b02ab100
+'''
+```
+
+
+
+## 11-4. 遍歷字典
+
+### - `keys()` 該方法會返回一個序列，序列中保存所有字典的key，通過遍歷`keys()`來獲取所有鍵。
+
+```python
+d = {'name': '孫悟空', 'age': 18, 'gender': '男'}
+# 通過遍歷keys()來獲取所有鍵
+for key in d.keys():
+    print(key, d[key])
+```
+
+### \- `values()` 該方法會返回字典的所有value
+
+```python
+d = {'name': '孫悟空', 'age': 18, 'gender': '男'}
+for value in d.values():
+    print(value)
+```
+
+### \- `items()` 該方法會返回字典中的所有項，它會返回一個序列，序列中包含雙值子序列  `[(k1,v1),(k2,v2),....]`
+
+```python
+d = {'name': '孫悟空', 'age': 18, 'gender': '男'}
+for k, v in d.items():
+    print(k, v)
+```
+
+
+
+<span alt="solid">範例: 11_字典</span>
+
+
+
+---
+
+# 12. 序列 - 集合`set`
+
 
 
 # 教學資源

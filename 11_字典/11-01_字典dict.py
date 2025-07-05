@@ -7,10 +7,10 @@ from enum import Enum
     - 在字典中每一個元素都有唯一的名字，通過這個唯一的名子可以快速地查找到指定的元素
     - 在查詢元素時，字典的效率是非常快的
     - 字典中也是可以保存多個對象，每個對象都會有一個唯一的名子
-                                這個唯一的名子,我們稱之為key(鍵)，通過key可以快速查找value
-                                這個對象，我們稱其為value(值)
-                                所以字典，我們也稱為鍵值對結構(key-value)
-                                每個字典中都可以有多個鍵值對，而每一個鍵值對，我們稱值為item
+      這個唯一的名子,我們稱之為key(鍵)，通過key可以快速查找value
+      這個對象，我們稱其為value(值)
+      所以字典，我們也稱為鍵值對結構(key-value)
+      每個字典中都可以有多個鍵值對，而每一個鍵值對，我們稱值為item
 """
 
 # 創建一個空字典
@@ -34,16 +34,15 @@ print(d['name'], d['age'], d['gender'])
 # print(d['hello'])  KeyError: 'hello'
 
 
-class Infos():
-    name = 'name'
-    age = 'age'
-    gender = 'gender'
-
-
 class Student():
+    class Infos:
+        name = 'name'
+        age = 'age'
+        gender = 'gender'
+
     def __init__(self, name: str, age: int, gender: str):
         self.info = {'name': name, 'age': age, 'gender': gender}
 
 jeff = Student('Jeff', 18, '男')
-print(jeff.info[Infos.name])
+print(jeff.info[Student.Infos.name])
 
