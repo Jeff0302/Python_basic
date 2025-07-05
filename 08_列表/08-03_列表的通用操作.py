@@ -28,7 +28,7 @@ print('max = ', max(arr), ',min=', min(arr))
 #         如果指定元素不存在會拋出異常 ValueError: 200 is not in list
 # print(arr.index(200))
 # index()的第二個參數，表示查找的起始位置，第三個參數，表示查找的結束位置(不包含)
-print(arr.index(10, 3))
+print(arr.index(10, 0))
 print(arr.index(10, 3, 5))
 
 # count() 返回列表中指定元素的個數，元素不存在，則返回0

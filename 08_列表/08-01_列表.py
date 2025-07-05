@@ -35,7 +35,7 @@ print(my_list[4])
 print(my_list[5])
 
 # 獲取列表中的元素個數
-# len()函數，通過該元素可獲取列表的長度
+# len()函數可以獲取列表的長度
 # 獲取到的長度，是列表的最大索引+1
 print(len(my_list))
 

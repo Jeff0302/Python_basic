@@ -887,6 +887,452 @@ if i < 5:
 
 
 
+<span alt="solid">範例: 07_循環語句</span>
+
+
+
+---
+
+
+
+# 8. 序列 - 列表
+
+>1. 列表是Python中的一個對象。
+>2. 對象(object)就是內存中專門用來儲存數據的一個區域。
+>3. 列表中可以保存多個有序的數據。
+
+
+
++    序列(sequence)
+
+  序列是Python中最基本的數據結構，數據結構是計算機中數據存儲的方式
+
+  序列用於保存一組有序的數據，所有的數據在序列當中都有唯一的位置(索引)
+  並且序列中的數據會依照添加的順序來分配索引
+
++ 序列的分類
+>1. 可變序列 (序列中的元素可以改變):
+>
+>   \- list(列表)
+>
+>2. 不可變序列  (序列中的元素不可以改變):
+>     \- str (字符串)
+>     \- tuple(元組)
+
+
+
+## 8-1. 列表的創建 `list_name= []`
+
+### - 當向列表中添加多個元素時，多個元素之間使用`，`隔開
+
+### - 列表中可以存儲任意數據類型
+
+### - 通過索引來獲取列表中的元素
+
+### - `len()`函數可以獲取列表的長度
+
+​	
+
+```python
+# 創建列表，通過[]來創建列表
+my_list = []
+print(my_list, type(my_list))
+
+# 列表中存儲的數據，我們稱為元素
+# 一個列表中可以儲存多個元素，也可以在創建列表時，來指定列表中元素
+my_list = [10]  # 創建一個只包含一個元素的列表
+
+# 當向列表中添加多個元素時，多個元素之間使用，隔開
+my_list = [10, 20, 30, 40, 50]  # 創建一個包含5個元素的列表
+print(my_list)
+
+# 列表中可以存儲任意數據類型
+my_list = [10, '123', False, None, [1, 3, 3], print]
+
+# 列表中的對象都會按照插入的順序儲存到列表中，第一個插入的對象保存到第一個位置
+#                                   ，第二個插入的對象保存到第二個位置...
+# 我們可以通過索引(index)來獲取列表中的元素，索引從0開始
+my_list = [10, 20, 30, 40, 50]
+print(my_list)
+
+# 通過索引來獲取列表中的元素
+print(my_list[4])
+# 如果使用的索引超過最大範圍，會拋出異常。 IndexError: list index out of range
+print(my_list[5])
+
+# 獲取列表中的元素個數
+# len()函數，通過該元素可獲取列表的長度
+# 獲取到的長度，是列表的最大索引+1
+print(len(my_list))
+
+```
+
+
+
+## 8-2. 列表的切片
+
+### - 列表的索引可以是負數
+
+>如果索引是負數，則會從後向前獲取元素，-1表示倒數第一個，-2表示倒數第二個，依此類推。
+
+###  - 通過切片來獲取指定的元素 `列表[起始:結束(不包含)]`
+
+>語法: `列表[起始:結束(不包含)]`
+>
+>+ 通過切片獲取元素時，會包含起始位置元素，但不包含結束位置元素。
+>+  做切片操作時，總會返回一個新的列表，`不會影響原來的列表`。
+>+ 如果省略結束位置，則會一直擷取到最後。
+>+ 如果省略開始位置，則會從第一個位置開始擷取。
+>+  如果開始位置和結束位置都省略，相當於創建了一個列表的副本。
+
+### - 通過切片來獲取指定的元素 `列表[起始:結束(不包含):步長]`
+
+>語法: `列表[起始:結束(不包含):步長]`
+>
+>+ 步長表示，每次獲取元素的間隔，默認值為1。
+>+ 步長不能是0，但可以是負數。
+
+
+
+```python
+# 實際應用案例little-endian <--> big-endian 轉換
+data_in_little = '11223344'
+data_in_big_bytearray = bytearray.fromhex(data_in_little)[::-1]
+data_in_big_bytearray[0] = 0x11
+print('type = %s , result = 0x%s' % (type(data_in_big_bytearray), data_in_big_bytearray.hex()))
+
+
+data_in_little = '11223344'
+data_in_big_bytearray = bytes.fromhex(data_in_little)[::-1]
+# TypeError: 'bytes' object does not support item assignment
+# data_in_big_bytearray[0] = 0x11
+print(type(data_in_big_bytearray[0]))
+print('type = %s , result = 0x%s' % (type(data_in_big_bytearray), data_in_big_bytearray.hex()))
+
+
+```
+
+
+
+### - *列表的傳遞是透過指針
+
+```python
+A = [1, 2, 3]
+B = A
+# 如果A,B要是不同對象可以使用copy()方法
+# B = A.copy()
+
+B[0] = 2
+# 雖然變的是B但A也被改變了
+print(f'A={A}')
+print(f'B={B}')
+print(f'ID A={id(A):#x}')
+print(f'ID B={id(B):#x}')
+```
+
+
+
+## 8-2.列表通用操作
+
+### - `+`運算可以將兩個列表拼接為一個新的列表
+
+```python
+A = [10, 20, 30]
+B = [40, 50, 60]
+C= A+B
+print(C)
+```
+
+### - `*`運算可以將列表重複一個指定的次數
+
+```python
+A = [10, 20, 30]
+B = A*6
+print(B)
+```
+
+### - `元素 [not] in 列表`  檢查指定元素是否(不)存在列表內
+
+```python
+A = [10, 20 , 30]
+B = 10
+C = 1
+result1 =  B in A
+print(result1)
+result2 =  C not in A
+print(result2)
+```
+
+ ### - `len()`獲取列表中的元素個素
+
+```python
+A = [10, 20 , 30]
+result1 = len(A)
+print(result1)
+```
+
+### - `max()/min()` 獲取列表中的最大最小值
+
+```python
+arr = [10, 1, 2, 5, 100, 77, 100]
+print('max = ', max(arr), ',min=', min(arr))
+```
+
+### - `index(_value,  _start. _end)`返回列表中指定元素的索引，如果有多個相同元素，則會返回第一個索引,如果指定元素不存在會拋出異常 `ValueError: 200 is not in list`
+
+```python
+arr = [10, 1, 2, 5, 100, 77, 100]
+print(arr.index(10, 3))
+print(arr.index(10, 3, 5))
+```
+
+### - `count(_value)`返回列表中指定元素的個數，元素不存在，則返回0
+
+```python
+arr = [10, 1, 2, 5, 100, 77, 100]
+print(arr.count(100))
+```
+
+
+
+## 8-3. 列表的修改
+
+### - 直接通過索引來修改
+
+```python
+# 創建一個列表
+stus = ['孫悟空', '豬八戒', '沙和尚', '唐僧', '蜘蛛精', '白骨精']
+
+# 修改列表中的元素
+# 直接通過索引來修改元素
+print('修改前:', stus)
+stus[0] = 'sunwukong'
+print('修改後:', stus)
+
+```
+
+### - 通過`del`關鍵字來刪除元素
+
+```python
+A = [1, 2 ,3]
+del A[0]
+print(A)
+```
+
+### - 通過切片修改列表
+
+>1. 在給切片賦值時，只能使用序列 `TypeError: can only assign an iterable`。
+>
+>2. 當設置步長時，序列中的元素個數必須和切片的元素個數一致。
+
+```python
+A = [1, 4, 5]
+print(A[0:1])
+A[0:1] = [0]
+print(A)
+A[1:3] = [1, 2]
+print(A)
+
+'''
+output
+[1]
+[0, 4, 5]
+[0, 1, 2]
+'''
+```
+
+### - 通過切片刪除元素`del A[::]` /`A[::] = []`
+
+>1. `del`關鍵字配合切片來刪除
+>2. `A[::] = []`通過切片刪除元素， 步長只能為1，否則報錯`ValueError: attempt to assign sequence of size 0 to extended slice of size 2`
+
+```python
+A = [1, 4, 5, 6, 7 ,8]
+# 移除偶數索引
+# del A[2::2]
+# 通過切片刪除元素
+# 1. 步長只能為1，否則報錯ValueError: attempt to assign sequence of size 0 to extended slice of size 2
+A[2::1] = []
+print(A)
+
+'''
+output
+[1, 4, 6, 8]
+# [1, 4]
+'''
+```
+
+### - 不可變序列，無法通過索引來修改，可以通過`list()`函數將其他序列轉換為list
+
+```python
+s = 'hello'
+# s[0] = 1
+# print(s)
+s1 = list(s)
+s1[0] = '1'
+print(''.join(s1))
+
+'''
+output
+# TypeError: 'str' object does not support item assignment
+1ello
+'''
+```
+
+> `'合併符號'join(Iterable[LiteralString])`: 可以將字符串列表合併為一個字串。
+
+
+
+## 8-4. 列表的方法
+
+### - `append()` 向列表最後添加一個元素
+
+```python
+stus = ['孫悟空', '豬八戒', '沙和尚']
+print('原列表:', stus)
+stus.append('唐僧')   # 等同stus[len(stus):len(stus)] = ['唐僧']
+print('新列表:', stus)
+```
+
+### - `insert(_index. _object)`向列表指定位置插入一個元素
+
+```python
+stus = ['孫悟空', '豬八戒', '沙和尚']
+stus.insert(1, '唐僧')
+print('新列表:', stus)
+```
+
+### - `extend(__iterable)`使用新序列來擴展當前序列，它會將該序列中的元素添加到當前列表
+
+```python
+stus = ['孫悟空', '豬八戒', '沙和尚']
+stu2s = ['Jeff', 'Amy']
+stus.extend(stu2s)      # stus += stu2s
+print('新列表:', stus)
+```
+
+### - `clear()`清空序列
+
+```python
+stus = ['孫悟空', '豬八戒', '沙和尚']
+stus.clear()
+print('新列表:', stus)
+```
+
+### - `pop(__index)`根據索引刪除並返回被刪除元素
+
+```python
+stus = ['孫悟空', '豬八戒', '沙和尚']
+del_element = stus.pop(2)     # 刪除索引為2的元素
+print('新列表:', stus, '被刪除元素:', del_element)
+```
+
+### - `remove(__value)`刪除指定元素，如果相同值有多個，它只會刪除第一個
+
+```python
+stus = ['孫悟空', '豬八戒', '沙和尚', '孫悟空']
+stus.remove('孫悟空')
+print('新列表:', stus)
+```
+
+### - `reverse()` 反轉列表
+
+```python
+stus = ['孫悟空', '豬八戒', '沙和尚']
+stus.reverse()
+print('新列表:', stus)
+```
+
+### -`sort(key, reverse)`用來對列表中元素進行排序，默認是升序排序, 如果需要降序排列，則需要傳遞一個`reverse=True`作為參數
+
+```python
+A = [10, 7, 5, 1, 6]
+# 默認是升序
+A.sort()
+print(A)
+# 關鍵字參數reverse=True來達到降序
+A.sort(reverse=True)
+print(A)
+
+A = [10, 7, 5, 1, 6]
+# 練習: 使用key關鍵字參數來對索引做排序
+A_index = list(range(len(A)))
+print(A_index)
+A_index.sort(key=lambda x: A[x])
+print(A_index)
+```
+
+
+
+## 8-5. 列表的遍歷
+
+### -  `for` 迴圈遍歷列表，指的就是將列表所有元素取出。
+
+>通過for循環來遍歷列表
+>
+>語法:
+>
+>​	 for `變量` in `列表`:
+>
+>​		  `代碼塊`
+>
+>說明:
+>
+>for循環的代碼塊會執行多次，序列中有幾個元素就會執行幾次
+>
+>每執行一次就會將序列中的元素賦值給變量
+>
+>所以我們可以通過變量，來獲取列表中的元素
+
+### - `for`循環除了創建方式以外，其餘都和`while`一樣，包括`else`、`break`、`continue`都可以在`for`循環使用
+
+```python
+# 創建列表
+stus = ['孫悟空', '豬八戒', '沙和尚', '唐僧']
+
+for stu in stus:
+    print(stu)
+```
+
+
+
+## 8-6. `range(起始位置:結束位置(不包含):步長)`函數
+
+### -可以用來生成一個自然數的序列
+
+```python
+r1 = range(5)   # 生成一個[0, 1, 2, 3 ,4]
+print(list(r1))
+
+# 該函數需要三個參數
+#   1.起始位置: 可以省略，默認是0
+#   2.結束位置(不包含)
+#   3.步長:  可以省略，默認是1
+r2 = range(1, 10, 2)
+print(list(r2))
+r3 = range(10, 0, -3)
+print(list(r3))
+
+'''
+output
+[0, 1, 2, 3, 4]
+[1, 3, 5, 7, 9]
+[10, 7, 4, 1]
+'''
+```
+
+
+
+
+
+<span alt="solid">範例: 08_列表</span>
+
+
+
+---
+
+
+
  
 
 # 教學資源
