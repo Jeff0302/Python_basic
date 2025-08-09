@@ -21,4 +21,4 @@ def fn(a: int, b: bool, c: str = 'hello') -> int:
     """
     return 10
 
-print(help(fn))
+help(fn)

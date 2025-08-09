@@ -1,4 +1,6 @@
 # 創建幾個函數
+import random
+
 def add(a, b):
     """
         求任意兩數和
@@ -88,3 +90,72 @@ def say_hello():
     print('大家好~~~')
 
 say_hello()
+
+# 應用情境
+#########################################################################
+'''
+假設我們已經定義了一個函數task，這個函數接受一個變量並返回一個執行結果
+ex: 自動測試中給定的測試參數，返回一個測試結果
+
+利用裝飾器來達到多次執行的多功能，但我們又希望每次執行的輸入參數是變動的
+*使用帶參數的裝飾器
+
+ex:
+run1 param1-1,param1-2
+run2 param2-1,param2-2
+run3 param3-1,param3-2
+run4 param4-1,param4-2
+run5 param5-1,param5-2
+
+'''
+def multi_run_script(runs: list):
+    def multi_run(task):
+        def multi_run_task(*args, **kwargs):
+            result = []
+            for i in range(len(runs)):
+                # 將多次執行結果返回到一個列表之中
+                result.append(task(*runs[i]))
+
+            return result
+
+        return multi_run_task
+
+    return multi_run
+
+
+from functools import wraps
+
+def multi_run_5times(task):
+    @wraps(task)
+    def multi_run_task(*args, **kwargs):
+        result = []
+        for i in range(5):
+            # 將多次執行結果返回到一個列表之中
+            result.append(task(*args))
+
+        return result
+
+    return multi_run_task
+
+
+@multi_run_5times
+# @multi_run_script([('1-1', '1-2'), ('2-1', '2-2'), ('3-1', '3-2')])
+def task(*test_params):
+
+    test_results =  *test_params, random.randint(0, 100), random.randint(10, 20)
+    # print(test_results)
+    return test_results
+
+# 執行1次task的結果
+print(task.__wrapped__('1-1', '1-2'))
+# ('1-1', '1-2', 65, 14)
+# 執行五次task的結果
+print(task('1-1', '1-2'))
+
+# 執行多次task的結果
+# 動態調用方式
+runs = ((str(i)+'-1', str(i)+'-2')for i in range(1, 4))
+print(multi_run_script(list(runs))(task.__wrapped__)())
+# [('1-1', '1-2', 31, 17), ('2-1', '2-2', 90, 14), ('3-1', '3-2', 81, 17)]
+
+#########################################################################

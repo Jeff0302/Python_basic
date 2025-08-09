@@ -9,50 +9,28 @@
 #       高階函數至少要符合以下兩個特點中的一個
 #       1. 接收一個或多個函數作為參數
 #       2. 將函數作為返回值返回
-
+from dask.sizeof import sizeof
+from toolz.curried import reduce
 
 # 創建一個列表
-l = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 # 定義一個函數
 #   可以將只指定列表中的所有偶數，保存到一個新列表中返回
 # 當我們使用一個函數作為參數時，實際上就是將指定的代碼傳進了目標函數
+
+li = range(10)
 
 def is_even(n: int):
     return not bool(n % 2)
 
 
-def fn(input_list: list, fun):
-    """
-        fn()函數可以將指定列表中的所有偶數獲取出來，並保存到一個新的列表中返回
+def get_by_fun(datas, fun):
+    li = []
+    for data in datas:
+        li.append(data) if fun(data) else None
 
-        參數 input_list: 要進行篩選的列表
-            fun: 要篩選的條件
-    """
-    # 創建一個新列表
-    result = []
-    # 對列表進行篩選
-    for element in input_list:
-        # 判斷element的奇偶
-        if fun(element):
-            result.append(element)
-    # 返回新列表
-    return result
+    return li
 
-
-print(fn(l, is_even))
-
-# filter()
-# filter()可以從序列中過濾出符合條件的元素，保存到一個新的序列中
-# 參數:
-#   1. 函數，根據該函數來過濾序列(可疊代結構)
-#   2. 需要過濾的序列(可疊代結構)
-# 返回值:
-#    過濾後的新序列(可疊代結構)
-
-# is_even是最作為參數傳遞進filter()函數中的
-#   而is_even實際上只有一個作用，就是作為filter()的參數
-#   filter()調用完畢以後，is_even就已經沒用
-print(list(filter(is_even, l)))
+print(get_by_fun(li, is_even))
 
 # 匿名函數lambda函數表達式(語法糖)
 #  lambda函數表達式專門用來創建一些簡單的函數，它是函數創建的另一種方式
@@ -64,11 +42,53 @@ print(list(filter(is_even, l)))
 fn2 = lambda x, y: x + y
 print(fn2(1, 3))
 
-print(list(filter(lambda x: x % 2 == 0, l)))
 
 # map()
 # map()函數可以對可疊代對象中的所有元素進行指定操作，並將結果添加到一個新的可疊代對象中返回
-print(list(map(lambda x: x + 1, l)))
+# 將a轉換為字符串列表 - 每個元素做類型轉換
+a = [1, 2, 3]
+a = map(lambda x: str(x), a)
+#  返回惰性求值（lazy）的 map 物件，不會馬上計算結果
+print(f'a= {a}')
+
+# - 惰性求值迭代器可搭配 for、next() 使用，也能與其他迭代器串聯
+print(f'next a= {next(a)}')
+print(f'next a= {next(a)}')
+print(f'next a= {next(a)}')
+# 一次性迭代器，被消耗光因此輸出空列表
+print(list(a))
+
+# reduce(__fun: (_T, _S) -> _T, __iter)
+# 它將一個可迭代物件的元素，依照使用者提供的二元函式，逐步歸約為單一結果，
+# 常見於累加、累乘或複雜折疊操作
+import functools
+data = ['00', '11', '22', '33']
+result = functools.reduce(lambda x, y: x+y, data)
+print(f'result= {result}')
+# 00112233
+
+# filter()
+# filter()可以從序列中過濾出符合條件的元素，保存到一個新的序列中
+# 參數:
+#   1. 函數，根據該函數來過濾序列(可疊代結構)
+#   2. 需要過濾的序列(可疊代結構)
+# 返回值:
+#    過濾後的新序列(可疊代結構)
+data = range(11)
+# 過濾出偶數
+result = filter(lambda x: not x%2, data)
+# 返回值是惰性求值迭代器
+print(f'result= {result}')
+# 是惰性求值迭代器可以配合for遍歷
+for num in result:
+    print(num, end=' ')
+
+print()
+
+# is_even是最作為參數傳遞進filter()函數中的
+#   而is_even實際上只有一個作用，就是作為filter()的參數
+#   filter()調用完畢以後，is_even就已經沒用
+print(list(filter(is_even, li)))
 
 # sort()
 # 該方法用來對列表中的元素進行排序

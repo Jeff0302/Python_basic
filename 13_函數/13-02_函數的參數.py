@@ -35,24 +35,29 @@ b = 'hello'
 b = None
 b =[1, 2, 3]
 # fn2(b)
-fn2((fn))
+fn2(fn)
 
-a = 10
-
-
-def fn4(a):
+def fn(a):
     # 在函數中對形參進行重新賦值，不會影響其他變量
-    # a = 20
+    a = [4, 5, 6]
+    print('a= {}, id= {:#018x}'.format(a, id(a)))
+
+a = [1, 2, 3]
+print('a= {}, id= {:#018x}'.format(a, id(a)))
+fn(a)
+print('a= {}, id= {:#018x}'.format(a, id(a)))
+
+print(''.center(10,'-'))
+# a是可變
+def fn(a):
     # a是一個列表，嘗試修改列表中的元素
     # 如果形參執行的是一個對象，當我們通過形參去修改對象時
-    #   會影響到所有指向該對象的變量
+    # 會影響到所有指向該對象的變量
     a[0] = 20
-    print('a=', a, id(a))
+
+a = [1, 2, 3]
+print('a= {}, id= {:#018x}'.format(a, id(a)))
+fn(a)
+print('a= {}, id= {:#018x}'.format(a, id(a)))
 
 
-# c = 10
-c = [1, 2, 3]
-# fn4(c)
-fn4(c.copy())
-
-print('c=', c, id(c))
