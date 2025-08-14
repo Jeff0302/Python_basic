@@ -14,6 +14,10 @@ class Person:
         # 通過self向新創建的對象添加屬性
         self.name = name
 
+    def __del__(self):
+        # 對象回收時會自動調用
+        print('對象銷毀')
+
     def say_hello(self):
         print(f'大家好!我是{self.name}')
 
@@ -31,6 +35,7 @@ p1 = Person('孫悟空')
 
 # p1.__init__()
 p1.say_hello()
+p1 = None
 
 # 類的基本結構
 # class 類名([父類]):
