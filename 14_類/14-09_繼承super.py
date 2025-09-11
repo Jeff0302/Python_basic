@@ -23,7 +23,7 @@ class Dog(Aniaml):
     def __init__(self, name, age):
         # 希望可以直接調用父類的__init__來初始化父類中定義的屬性
         # super()可以用獲取當前類的父類
-        #  並且通過super()返回對象來調用父類方法，不歇要傳遞self
+        #  並且通過super()返回對象來調用父類方法，不需要傳遞self
         super(Dog, self).__init__(name)
         # super().__init__(name)
         # Aniaml.__init__(self, name)

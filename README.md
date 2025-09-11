@@ -1075,7 +1075,7 @@ arr = [10, 1, 2, 5, 100, 77, 100]
 print('max = ', max(arr), ',min=', min(arr))
 ```
 
-### - `index(_value,  _start. _end)`返回列表中指定元素的索引，如果有多個相同元素，則會返回第一個索引,如果指定元素不存在會拋出異常 `ValueError: 200 is not in list`
+### - `index(_value,  _start, _end)`返回列表中指定元素的索引，如果有多個相同元素，則會返回第一個索引,如果指定元素不存在會拋出異常 `ValueError: 200 is not in list`
 
 ```python
 arr = [10, 1, 2, 5, 100, 77, 100]
@@ -3356,31 +3356,523 @@ print(p.name)
 
 ### 14-2-3. 繼承（Inheritance）
 
-#### 1. 什麼是繼承:
+#### 1. 什麼是繼承: 繼承讓子類別可以重用並擴展父類別的屬性和方法
+
+>  繼承允許新定義的子類別（subclass）自動取得父類別（base class）的屬性和方法。這種機制能`促進程式碼重用`與`類別間的關係建模`。
+
++ 範例: 定義一個動物類及狗類。其中狗類繼承自動物類。(由動物類派生狗類)。
+
+##### - `isinstance()`: 檢查一個對象是否是一個類的實例
+
+##### - `issubclass()`: 檢查一個對象是否是一個類的子類
+
+```python
+# 繼承
+# 定義一個類Animal(動物)
+#   這個類中需要兩個方法: run() sleep()
+
+class Animal:
+    def run(self):
+        print('動物會跑')
+
+    def sleep(self):
+        print('動物睡覺')
+
+# 定義一個狗類
+#   這個類中需要三個方法: run() sleep()  bark()
+# 有一個類，能實現我們大部分功能，但不能實現全部功能
+# 如何能讓這個類來實現全部的功能?
+#   1. 直接修改這個類，在類中添加我們需要的功能
+#      - 修改起來會比較麻煩，並且會違反OCP原則
+#   2. 直接創建一個新的類
+#      - 創建一個新的類比較麻煩，並且需要進行大量的複製貼上，會出現大量的重複性大代碼
+#   3. 直接從Animal類中來繼承它的屬性和方法
+#      - 繼承是面向對象三大特性之一
+#      - 通過繼承我們可以使一個類獲取到其他類中的屬性和方法
+#      - 在定義類時，可以在類名後的括號中指定當前類的父類(超類、基類、super)
+#          子類(衍生類)可以直接繼承父類中的所有屬性和方法
+#
+#  通過繼承可以直接讓子類獲取到父類中的屬性和方法，避免編寫重複性代碼，並符合OCP原則
+#    所以我們經常需要通過繼承來對一個類進行擴展
+
+class Dog(Animal):
+    def bark(self):
+        print('狗在嚎叫~~')
+
+d = Dog()
+d.bark()
+d.run()
+
+# 在創建類時，如果省略了父類，則默認父類為object
+#  object是所有類的父類，所有類都繼承自object
+
+# isinstance()檢查一個對象是否是一個類的實例
+#   如果這個類是這個對象的父類，也會返回True
+#   所有對象都是object的實例
+print(isinstance(d, Dog))
+print(isinstance(d, object))
+
+# issubclass()檢查一個類是否是另一個類的子類
+print(issubclass(Dog, Animal))
+print(isinstance(d, Animal))
+```
 
 
 
+#### 2. 繼承的語法
+
+##### - 單一繼承
+
+```python
+class Parent:
+    def greet(self):
+        print("Hello from Parent")
+
+class Child(Parent):
+    pass
+
+c = Child()
+c.greet()  # 輸出：Hello from Parent
+```
+
+>1. 告子類別只需在類名後面括號內指定父類別名稱。
+>2. 子類別如果不做覆寫，就會直接使用父類別的方法。
+
+##### - 方法覆寫（Override）
+
+>  若子類別需要修改父類別的方法，只要在子類別中重新定義同名方法即可。
+
+```python
+class Parent:
+    def greet(self):
+        print("Hello from Parent")
+
+class Child(Parent):
+    def greet(self):
+        print("Hello from Child")
+
+c = Child()
+c.greet()  # 輸出：Hello from Child
+
+```
+
+>[!NOTE]
+>
+>  當調用一個對象的方法時，會優先去當前對象中尋找是否具有該方法，如果有則直接使用，如果沒有會去當前對象的父類中尋找，如果父類中有該方法，則直接調用父類中的方法，如果沒有，則去父類的父類中尋找，以此類推，直到找到object為止，如果依然沒找到則報錯。
+
+
+
+##### - `super()`呼叫父類別方法
+
+>1. 父類中的所有方法都會被子類繼承，包含特殊方法。
+>2. 當子類中有增加的屬性時，構造函數需要增加參數，這時可以重寫`__init__()`，但對於父類的初始，需要使用`super()`來調用父類的構造。
+>3. 也可以透過`super()`來調用父類的方法。
+>
+
+```python
+class Aniaml:
+    def __init__(self, name):
+        self._name = name
+
+    def run(self):
+        print('動物會跑~~~')
+
+    def sleep(self):
+        print('動物睡覺~~~')
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        self._name = name
+
+
+# 父類中的所有方法都會被子類繼承，包刮特殊方法，也可以重寫特殊方法
+
+class Dog(Aniaml):
+    def __init__(self, name, age):
+        # 希望可以直接調用父類的__init__來初始化父類中定義的屬性
+        # super()可以用獲取當前類的父類
+        #  並且通過super()返回對象來調用父類方法，不需要傳遞self
+        super(Dog, self).__init__(name)
+        # super().__init__(name)
+        # Aniaml.__init__(self, name)
+        self._age = age
+
+    def bark(self):
+        print('汪汪汪~~~')
+
+    def run(self):
+        print('狗跑')
+
+    @property
+    def age(self):
+        return self._age
+
+    @age.setter
+    def age(self, age):
+        self._age = age
+
+        
+d = Dog('哈士奇', 6)
+print(d.name)
+print(d.age)
+```
+
+>[!NOTE]
+>1. 繼承Aniaml構造函數只需要一個name作為參數，如果Dog類多了一個age參數，在初始化階段會報錯
+>     --> 解決方式重寫子類的`__init__()`並新增一個參數
+>2. 為了保留為父類的邏輯需要調用父類的構造，如何調用父類的方法
+>     --> 使用`super()`來調用父類方法
+>
+
+
+
+##### - 多重繼承
+
+>  在Python中是支持多重繼承的，也就是我們可以為一個類同時指定多個父類。可以在類名中的()添加多個類，來實現多重繼承
+>多重繼承，會使子類同時擁有多個父類，並且會獲取到父類中所有方法。在開發中沒有特殊情況，應該盡量避免使用多重繼承，因為多重繼承會讓代碼過於複雜。
+
+###### `__bases__`: 這個屬性可以用來獲取當前類的所有父類
+
+```python
+class A(object):
+    def test(self):
+        print('AAA')
+
+    def test2(self):
+        print('A_BBB')
+
+class B(object):
+    def test2(self):
+        print('BBB')
+
+# C(A, B) 、 C(B, A)
+class C(A, B):
+    def test3(self):
+        print('CCC')
+
+# __bases__ 這個屬性可以用來獲取當前類的所有父類
+c = C()
+c.test2()
+print(C.__bases__)
+```
+
+>[!NOTE]
+>  如果多個父類中有同名的方法，則會在第一個父類中尋找，如果有則使用,如果沒有則會往下面的父類尋找，依此類推，如果都沒找到則會報錯。
 
 
 
 
 ### 14-2-4. 多態（Polymorphism）
 
-#### 1. 什麼是多態: 
+#### 1. 什麼是多態: 多態是指在相同介面下，不同類別的物件可以各自以自己的方式回應呼叫的能力
+
+>  多態性允許在相同介面（方法名稱）下，對不同類別的物件執行各自適切的行為。這能強化程式碼的靈活度與可擴充性，減少大量的條件分支判斷。
+
+```python
+# 定義兩個類
+class A:
+    def __init__(self, name):
+        self._name = name
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        self._name = name
 
 
+class B:
+    def __init__(self, name):
+        self._name = name
 
+    def __len__(self):
+        return 10
 
+    @property
+    def name(self):
+        return self._name
 
+    @name.setter
+    def name(self, name):
+        self._name = name
 
+class C:
+    pass
+a = A('孫悟空')
+b = B('豬八戒')
+c = C()
+
+# 定義一個函數
+# 對於say_hello()這個函數來說，只要對象中存在name屬性，它就可以作為實參傳遞
+#  這個函數並不會考慮對象的類型，只要有name屬性即可
+def say_hello(obj):
+    print('你好 %s' % obj.name)
+
+    
+say_hello(a)
+say_hello(b)
+
+# len()
+# 之所以一個對象能通過len()來獲取長度，是因為對象中具有一個特殊方法__len__
+# 換句話說，只要對象中具有__len__這個特殊方法，就可以通過len()來獲取長度
+
+l = [1, 2, 3]
+s = 'hello'
+print(len(l))
+print(len(s))
+print(len(b))
+
+```
 
 
 
 ## 14-3. 類的屬性與方法
 
+### 14-3-1. 類屬性與實例屬性
+
+>      在 Python 中，`類屬性（Class Attributes)` 是屬於類本身的變數，而不是某個特定實例。這些屬性會被所有實例共享，與`實例屬性（Instance Attributes)`不同)。
+
+#### - 實例屬性只能通過實例訪問，無法通過類訪問實例屬性
+
+#### - 類屬性可以被類及實例訪問
+
+#### - 類屬性只能被類修改，無法通過實例修改。(通過實例修改會建立一個新的實例屬性，遮蔽原本的類屬性)
+
++ 類屬性 vs 實例屬性
+
+| 屬性類型 | 定義位置                      | 是否共享 | 訪問方式                             |
+| -------- | ----------------------------- | -------- | ------------------------------------ |
+| 類屬性   | 類內部、方法外部              | ✅ 是     | `ClassName.attr`) 或 `instance.attr` |
+| 實例屬性 | 類方法內部，通常在 `__init__` | ❌ 否     | `self.attr`                          |
+
+```python
+class A(object):
+
+    # 類屬性
+    # 實例屬性
+
+    # 類屬性，直接在類中定義的屬性是類屬性
+    # 類屬性可以通過類和類的實例訪問到
+    # 但是類屬性只能通過類對象來修改，無法通過實例對象來修改
+    count = 0
+
+    def __init__(self):
+        # 實例屬性，通過實例對象添加的屬性屬於實例屬性
+        # 實例屬性只能通過實例對象訪問和修改，類對象無法訪問修改
+        self.name = '孫悟空'
+        
+a = A()
+# 實例屬性，通過實例對象添加的屬性屬於實例屬性
+a.count = 1
+A.count = 100
+print(a.count, ' ', id(a.count))
+print(A.count, ' ', id(A.count))
+
+'''
+1   140711216313128
+100   140711216316296
+'''
+```
+
+>[!NOTE]
+>
+>1. 若透過 [`instance.attr`](https://instance.attr)` = value` 修改類屬性，會建立一個新的實例屬性，遮蔽原本的類屬性。(`無法通過實例修改類屬性`)
+>
+>2. 類屬性適合儲存所有實例共通的資料，例如常數、設定值等。
+
+### 14-3-2. 類方法與實例方法
+
+>  實例方法只能透過實例呼叫，第一個參數是`self` ，可以存取該實例的屬性與類別屬性。類方法使用`@classmethod`裝飾，第一個參數是`cls`，可透過類別或實例呼叫，但只能存取或修改類別屬性。
+
+#### - 通過實例調用實例方法時，第一個`self`參數為自動傳遞
+
+#### - 通過類調用實例方法時，第一個`self`參數不會自動傳遞，需要自行傳遞(一般不這麼用)
+
+#### - 通過類或實例調用類方法時，第一個`cls`參數會自動傳遞
+
+#### - 可以通過實例調用類方法來修改類屬性，間接完成實例修改類屬性的功能。
+
+
+
+```python
+class A(object):
+    # 實例方法
+    # 類方法
+    # 靜態方法
+    count = 0
+
+    def __init__(self):
+        pass
+
+    # 實例方法
+    #  在類中定義，以self為第一個參數的方法都是實例方法
+    # 實例方法在調用時，Python會將調用對象作為self傳入
+    # 實例方法可以通過實例和類去調用
+    #   當通過實例去調用時，會自動將當前調用的對象作self傳入
+    #   當通過類去調用時，不會自動傳遞self，此時我們必須手動傳遞self
+    def test(self):
+        print('這是test方法~~~', self)
+
+    # 類方法
+    # 在類內部使用 @classmethod 來修飾的方法屬於類方法
+    # 類方法的第一個參數是cls，也會被自動傳遞，cls就是當前的類對象
+    #  類方法和實例方法的區別，實例方法第一個參數是self，而類方法第一個參數是cls
+    #  類方法可以通過類去調用，也可以通過實例調用，沒有區別
+    @classmethod
+    def test2(cls):
+        cls.count = temp
+        print('這是test2方法~~', cls)
+        
+a = A()
+# a.test()等價於A.test(a)
+a.test()
+A.test(a)
+
+A.test2(0)
+# 我們知道通過實例不能直接修改類屬性，但可以間接透過調用類方法來修改類屬性
+a.test2(1000)
+print(A.count)
+
+```
+
+
+
+### 14-3-3. `@classmethod`與@`staticmethod`差異
+
+#### - `@staticmethod`: 定義不依賴於類別或實例的靜態方法，不接收 `self` 或 `cls`，更像是在類內部定義的普通函式。
+
+#### - `@classmethod`: 定義綁定到類別的方法，第一個參數是 `cls`，可透過它訪問或修改類別層級的屬性，並常用於工廠方法或管理共享狀態。
+
+```python
+class A(object):
+    def __init__(self):
+     	pass
+    
+    # 靜態方法
+    # 在類中使用 @staticmethod 來修飾的方法屬於靜態方法
+    # 靜態方法不需要指定任何默認參數，靜態方法可以通過類和實例調用
+    # 靜態方法基本上是一個和當前類無關的方法，它只是保存到當前類中的函數
+    # 靜態方法一般都是一些工具方法，和當前類無關
+    @staticmethod
+    def test3():
+        print('這是test3方法')
+
+a = A()
+
+A.test3()
+a.test3()
+```
+
+
+
+
+
 
 
 ## 14-4. 特殊方法補充
+
+
+
+
+
+## 14-5. 抽象類
+
+### 14-5-1. 什麼是抽象類(未實現的類)
+
+#### - 抽象類是一個`不能被實例化的類`
+
+#### - 抽象方法是一個`沒有具體實現的方法`(子類中重寫方法)
+
+#### - 一個抽象類可以有或沒有抽象方法
+
+>[!NOTE]
+>
+>  Python沒有直接支持抽象類，但提供一個`模塊(abc)`來允許定義抽向類。
+
+### 14-5-2. 如何定義抽象類`ABC`
+
+#### - 通過繼承`ABC`來定義一個抽象類
+
+```python
+# 1.引入abc模塊來定義抽象類
+from abc import ABC, abstractmethod
+
+
+# 2.繼承ABC來定義抽象類
+class Action(ABC):
+    # 3. 定義抽象方法(等同c++純虛函數)(未實現方法)
+    @abstractmethod
+    def execute(self):
+        pass
+
+```
+
+#### - 定義抽象方法使用`@abstractmethod`裝飾器
+
+```python
+# 2.繼承ABC來定義抽象類
+class Action(ABC):
+    # 3. 定義抽象方法(等同c++純虛函數)(未實現方法)
+    @abstractmethod
+    def execute(self):
+        pass
+
+```
+
+### 14-5-3. 使用抽象類
+
+>   子類繼承抽象類，重寫抽象方法。
+
+```python
+# 繼承抽象類，重寫抽象方法(純虛函數)
+class CreateStudentAction(Action):
+    # 如果沒有重寫抽象方法，依然是一個抽象類，則無法實例化
+    def execute(self):
+        print("CreateStudentAction執行了")
+
+```
+
+### 14-5-4. 抽象屬性
+
+>  在 Python 中，抽象屬性是指在抽象基底類別（Abstract Base Class，ABC）中宣告的屬性，需要由所有子類別實作其 getter 與 setter，否則在實例化時會拋出 `TypeError`，確保各子類別提供一致的屬性介面
+
+```python
+from abc import ABC, abstractmethod
+
+class AbstractClass(ABC):
+    @property
+    @abstractmethod
+    def abstract_property(self):
+        """子類別必須實作此 getter"""
+        pass
+
+    @abstract_property.setter
+    @abstractmethod
+    def abstract_property(self, value):
+        """子類別必須實作此 setter"""
+        pass
+```
+
+>[!NOTE]
+>
+>1. `AbstractClass`繼承自`ABC`，代表它是一個抽象基底類別。
+>2. 先用`@abstractmethod`標記它是抽象方法，再用 `@property` 設定getter。
+>3. 接著用`@abstractmethod`與`@abstract_property.setter`標記setter。
+>4. 子類別若未同時實作 getter 與 setter，就無法被實例化。
+
+
+
+範例: 14_類
+
+
+
+---
 
 
 

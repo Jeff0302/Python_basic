@@ -31,7 +31,8 @@ class A(object):
     #  類方法和實例方法的區別，實例方法第一個參數是self，而類方法第一個參數是cls
     #  類方法可以通過類去調用，也可以通過實例調用，沒有區別
     @classmethod
-    def test2(cls):
+    def test2(cls, temp):
+        cls.count = temp
         print('這是test2方法~~', cls)
 
     # 靜態方法
@@ -45,7 +46,7 @@ class A(object):
 
 a = A()
 # 實例屬性，通過實例對象添加的屬性屬於實例屬性
-# a.count = 1
+a.count = 1
 A.count = 100
 print(a.count, ' ', id(a.count))
 print(A.count, ' ', id(A.count))
@@ -56,8 +57,10 @@ a.test()
 A.test(a)
 
 print(A)
-A.test2()
-a.test2()
+A.test2(0)
+# 我們知道通過實例不能直接修改類屬性，但可以間接透過調用類方法來修改類屬性
+a.test2(1000)
+print(A.count)
 
 A.test3()
 a.test3()
