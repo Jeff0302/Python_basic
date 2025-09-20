@@ -3773,7 +3773,7 @@ a.test3()
 
 ## 14-4. 垃圾回收
 
->  就像我們生活中會產生垃圾一樣，程序在運行過程當中也會產生垃圾，程序運行當中的垃圾會影響到程序運行的效能，所以這些垃圾必須被即時清理，沒有用的東西就是垃圾，在程序中沒有被引用的對象就是垃圾，這種圾垃對象過多以後會影響到程序的運行效能，所以我們必須進行即時的垃圾回收，所謂的垃圾回收就是將垃圾對象從內存中刪除，在Python中有自動的圾垃回收機制，它將會自動將沒有被引用的對象刪除，所以我們不用手動處理垃圾回收。
+>    就像我們生活中會產生垃圾一樣，程序在運行過程當中也會產生垃圾，程序運行當中的垃圾會影響到程序運行的效能，所以這些垃圾必須被即時清理，沒有用的東西就是垃圾，在程序中沒有被引用的對象就是垃圾，這種圾垃對象過多以後會影響到程序的運行效能，所以我們必須進行即時的垃圾回收，所謂的垃圾回收就是將垃圾對象從內存中刪除，在Python中有自動的圾垃回收機制，它將會自動將沒有被引用的對象刪除，所以我們不用手動處理垃圾回收。
 
 ```python
 class A:
@@ -3798,6 +3798,329 @@ input('回車鍵退出...')
 
 
 ## 14-5. 特殊方法補充
+
+### 14-5-1. 實例化
+
+#### - `__new__(cls, *args, **kwargs)`: 創建實例(靜態方法，必須返回實例)
+
+>  `__new__` 是一個`靜態方法`，用於`創建並返回類的新實例`，並在 `__init__` 之前執行。它接收一個參數 `cls`，`必須返回一個該類或其子類的實例`。如果返回其他類型或 `None`，`__init__` 就不會被執行。
+
+#### - `__init__(self, *args, **kwargs)`: 實例初始
+
+#### - `__del__(self)`: 實例的銷毀
+
+```python
+class Person:
+    def __new__(cls, *args, **kwargs):
+        print('cls= ',cls)
+        print('args= ', args)
+        print('kwargs ', kwargs)
+        print('__new__被調用了')
+        # __new__必須返回一個實例，反__init__不會被調用
+        # 如何創建實例
+        # 1. 不可以自己創建，會造成遞規創建
+        # 2. 通過父類的實例方法__new__來創建並返回實例，__new__是一個靜態方法必需手動傳參
+        return super().__new__(cls)
+        # 錯誤: RecursionError: maximum recursion depth exceeded while calling a Python object
+        # return cls(*args, **kwargs)
+
+    def __init__(self, name, age=18):
+        # 在 __new__ 返回後被調用
+        print('__init__被調用了')
+        self.name = name
+        self.age = age
+
+
+p1 = Person('Jeff', age=20)
+print(p1)
+
+'''
+cls=  <class '__main__.Person'>
+args=  ('Jeff',)
+kwargs  {'age': 20}
+__new__被調用了
+__init__被調用了
+<__main__.Person object at 0x000001546D09E050>
+'''
+```
+
+
+
+### 14-5-2. 可視化
+
+#### - `__str__`
+
+>   `str()`函數、`format()`函數、`print()`函數調用。需要返回對象的字符串表達。如果沒有定義就會去調用`__repr__`返回字符串表達。如果`__repr__`沒有定義，就返回對象的內存地址信息。
+
+#### - `__repr__`
+
+>  內建函數`repr()`對一個對象獲取字符串表達。調用`__repr__`方法返回自字符串表達。如果`__repr__`沒有定義，就直接返回對對象地址信息。
+
+#### - `__bytes__`
+
+>  `bytes()`函數調用，返回一的對象的bytes表達，即返回bytes對象。
+
+```python
+import json
+
+
+class Person:
+    def __init__(self, name, age=18):
+        self.name = name
+        self.age = age
+
+    def __str__(self):
+        return f'[__str__] name= {self.name}, age= {self.age}'
+
+    def __repr__(self):
+        return f'[__repr__] name= {self.name}, age= {self.age}'
+
+    def __bytes__(self):
+        return json.dumps(self.__dict__).encode()
+
+p1 = Person('Jeff', age=20)
+
+print(p1)
+print(str(p1))
+print(f'{p1}')
+
+print([p1, p1]) # []使用__str__，但其內部使用__repr__
+print([str(p1)]) # []使用__str__，其中元素使用str()也使用__str__
+
+print(bytes(p1))
+
+'''
+[__str__] name= Jeff, age= 20
+[__str__] name= Jeff, age= 20
+[__str__] name= Jeff, age= 20
+[[__repr__] name= Jeff, age= 20, [__repr__] name= Jeff, age= 20]
+['[__str__] name= Jeff, age= 20']
+b'{"name": "Jeff", "age": 20}'
+
+'''
+```
+
+
+
+### 14-5-3. `hash`
+
+#### - `__hash__`
+
+>  內建函數`hash()`調用的返回值，`返回一個整數`，如果定義這個方法該類的實例就可以hash。
+
+>[!NOTE]
+> set去重原理
+> step1. 第一步必須求hash，hash衝突了才需要去重
+> step2. 第二步 去重 比較內容
+
+```python
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def __hash__(self):
+        # 1. __hash__返回值必須為整型
+        return 100
+        # return  hash(self.name)
+
+    def __repr__(self):
+        return self.name
+
+    # 運算符重載
+    def __eq__(self, other):
+        return self.name == other.name
+
+
+print(hash(Person))
+# print(hash(Person('Tom')))
+# print(hash(Person('Jeff')))
+
+tom1 = Person('Tom')
+tom2 = Person('Tom')
+print(f'tom1 hash= {hash(tom1)}')
+print(f'tom2 hash= {hash(tom2)}')
+
+print([tom1, tom2]) # [Tom, Tom]
+print((tom1, tom2)) # (Tom, Tom)
+print({'Tom', 'Tom'}) # {Tom}
+'''
+hash地址相同，hash值相同，hash值衝突;看內容是否相同
+
+set去重原理
+step1. 第一步必須求hash，hash衝突了才需要去重
+step2. 第二步 去重 比較內容
+'''
+print({tom1, tom2}) # {Tom, Tom}
+
+jerry = Person('Jerry')
+print({tom1, tom2, jerry}) # {Jerry, Tom}
+
+```
+
+
+
+### 14-5-4. 容器相關的特殊方法 
+
+#### - `__bool__`及`len__`
+
+>  在 Python 中，`__bool__` 和 `__len__` 是用來參與「真值測試」（truth value testing）的兩個魔術方法。它們的調用時機與優先順序有明確規則，尤其在你使用 `if obj:` 或 `while obj:` 等語句時，Python 會自動決定該物件是否為「真」或「假」。
+
++ 調用時機與優先順序
+
+  \- 當 Python 需要判斷一個物件的布林值時（例如 `if obj:`）：優先調用 `__bool__()`。
+
+  \- 若物件定義了 `__bool__()`，則直接使用其回傳值（必須是 `True` 或 `False`）。
+
+  \- 若未定義 `__bool__()`，則調用 `__len__()`。若 `__len__()` 回傳 `0`，則視為 `False`；否則視為 `True`。
+
+  \- 若兩者皆未定義，則預設為 `True`。
+
+
+| 方法       | 回傳型態 | 調用時機                     |
+| ---------- | -------- | ---------------------------- |
+| `__bool__` | `bool`   | 優先於 `__len__` 被調用      |
+| `__len__`  | `int`    | 當 `__bool__` 未定義時被調用 |
+
+
+
+#### - `__setitem__`: 觸發時機`obj[key]`或 `for x in obj`
+
+#### - ` __getitem__`: 觸發時機`obj[key] = value`
+
+#### - `__delitem`:  觸發時機`del obj[key]`或 `del obj[key1:key2]`
+
+#### - `__contains__`: 觸發時機`value in obj`
+
+#### - `__iter__`: 觸發時機`iter(obj)`或 `for x in obj`
+
+>  以下方法構成了 Python 容器（sequence 或 mapping）最核心的操作協議。透過這些方法，你可以讓自訂類別像 `list`、`dict`一樣被索引、刪除、遍歷、成員測試等。
+
+| 方法           | 觸發時機                               | 典型回傳/行為                 |
+| -------------- | -------------------------------------- | ----------------------------- |
+| `__getitem__`  | `obj[key]` 或 `for x in obj`           | 回傳 `obj[key]` 的值          |
+| `__setitem__`  | `obj[key] = value`                     | 設定或插入 `value`            |
+| `__delitem__`  | `del obj[key]` 或 `del obj[key1:key2]` | 刪除指定鍵或切片              |
+| `__contains__` | `value in obj`                         | 回傳 `True` 或 `False`        |
+| `__iter__`     | `iter(obj)` 或 `for x in obj`          | 回傳一個可迭代物件 (iterator) |
+
+
+
+```python
+class Cart:
+    def __init__(self, **kwargs):
+        if len(kwargs)==0:
+            self.__items_name = []
+            self.__items_index = []
+            self.__items = dict()
+            self.__num_of_item = 0
+        else:
+            self.__items = kwargs
+            self.__num_of_item = len(kwargs)
+            self.__items_name = list(kwargs.keys())
+            self.__items_index = list(range(self.__num_of_item))
+
+
+    def __setitem__(self, key, value: str|list):
+        if isinstance(key, str):
+            if key not in self.__items_name:
+                self.__num_of_item += 1
+                self.__items_index.append(self.__num_of_item - 1)
+                self.__items_name.append(key)
+            self.__items[key] = value
+
+        elif isinstance(key, list):
+            for i, temp in enumerate(key):
+                if temp not in self.__items_name:
+                    self.__num_of_item += 1
+                    self.__items_index.append(self.__num_of_item - 1)
+                    self.__items_name.append(temp)
+
+                self.__items[temp] = value[i]
+
+
+    def __getitem__(self, key):
+        if isinstance(key, str):
+            input_dict = {key: self.__items[key]}
+        elif isinstance(key, list):
+            input_dict = {temp: self.__items[temp] for temp in key}
+        else:
+            raise Exception('key error')
+
+        # return True
+        return Cart(**input_dict)
+
+
+    def __iter__(self):
+        yield from (self.__getitem__(key) for key in self.__items_name)
+
+
+    def __repr__(self):
+        # print(self.__items_name)
+        # print(self.__items_index)
+        return str(self.__items)
+
+    def __contains__(self, key):
+        return key in self.__items_name
+
+    def __delitem__(self, key):
+        idx = self.__items_name.index(key)
+        self.__items_name.pop(idx)
+        self.__num_of_item -= 1
+        self.__items_index = list(range(self.__num_of_item))
+        del self.__items[key]
+
+    def __len__(self):
+        return len(self.__items)
+
+
+shopping_cart = Cart()
+
+#############################################################################################
+# __setitem__特殊方法實現單個及多個購物車添加
+shopping_cart['購物車1'] = ['水']
+shopping_cart['購物車1'] = ['好水']
+shopping_cart[['購物車2', '購物車3']] = [['餅乾', '酒', '雞肉'], ['冰']]
+
+print(shopping_cart, f'type= {type(shopping_cart)}')
+
+###############################################################################################
+# __getitem__特殊方法獲取單個及多個購物車內容
+print('-'*30)
+temp = shopping_cart['購物車1']
+print(temp, f'type= {type(temp)}')
+
+temp = shopping_cart[['購物車1', '購物車2']]
+print(temp, f'type= {type(temp)}')
+
+###############################################################################################
+# 遍歷購物車
+# it = iter(shopping_cart)
+# print(next(it))
+# print(next(it))
+# print(next(it))
+# 遍歷購物車
+print('-'*30)
+for cart in shopping_cart:
+    print(cart, f'type= {type(cart)}')
+
+###############################################################################################
+# __contains__特殊方法 配合in關鍵字
+print('-'*30)
+print('購物車4' in shopping_cart)
+
+###############################################################################################
+# __delitem__特殊方法 配合del關鍵字
+print('-'*30)
+del shopping_cart['購物車1']
+del shopping_cart['購物車3']
+print(len(shopping_cart))
+for cart in shopping_cart:
+    print(cart, f'type= {type(cart)}')
+
+
+```
+
+
 
 
 
